@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<!-- inherit plugin dependency versions from spring-boot-starter-parent 
+		used in framework-common -->
+	<parent>
+		<groupId>com.tecnotree.dclm</groupId>
+		<artifactId>common-framework-parent</artifactId>
+		<version>5.0.1-SNAPSHOT</version>
+	</parent>
+
+	<groupId>com.tecnotree.digital-wallet</groupId>
+	<artifactId>digital-wallet</artifactId>
+	<version>5.0.0-SNAPSHOT</version>
+	<packaging>pom</packaging>
+
+	<name>Tecnotree Digital DIGITAL-Wallet PARENT</name>
+	<description>Parent for digital-wallet springboot</description>
+
+	<!-- set properties not inherited from parent common-framework and spring-boot-starter -->
+	<properties>
+		<common.framework.version>5.0.1-SNAPSHOT</common.framework.version>
+		<common.models.version>5.0.1-SNAPSHOT</common.models.version>
+		<embedded-mongo.version>2.2.0</embedded-mongo.version>
+	</properties>
+
+	<!-- ************************************************************ -->
+	<!-- Tecnotree repository for distribution of releases, snapshots -->
+	<!-- ************************************************************ -->
+	<profiles>
+		<profile>
+			<id>nexus</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+
+			<distributionManagement>
+				<repository>
+					<id>tt-nexus</id>
+					<name>tt-nexus-release</name>
+					<url>https://nexus.tecnotree.com/repository/maven-releases/</url>
+				</repository>
+				<snapshotRepository>
+					<id>tt-nexus</id>
+					<name>tt-nexus-snapshot</name>
+					<url>https://nexus.tecnotree.com/repository/maven-snapshots/</url>
+				</snapshotRepository>
+			</distributionManagement>
+		</profile>
+
+		<!-- ************************************** -->
+		<!-- AGGREGATE CHILD MODULE BUILD SEQUENCE -->
+		<!-- *************************************** -->
+		<profile>
+			<id>digital</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+
+			<modules>
+				<module>digital-wallet-payment-services</module>
+
+			</modules>
+		</profile>
+
+	</profiles>
+
+	<!-- ******************************** -->
+	<!-- THIS PARENT BUILD CONFIGURATION -->
+	<!-- ******************************** -->
+	<build>
+		<!-- PLUGIN goals executed in this parent POM -->
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>enforce-versions</id>
+						<phase>validate</phase>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<rules>
+								<requireJavaVersion>
+									<version>[${java.min.version},)</version>
+								</requireJavaVersion>
+								<requireMavenVersion>
+									<version>[${maven.min.version},)</version>
+								</requireMavenVersion>
+								<requirePluginVersions>
+									<message>it is a best practice to define plugin version either
+										in plugins or pluginManagement</message>
+								</requirePluginVersions>
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- clean output directory before building the assembly directory -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-clean-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>auto-clean</id>
+						<phase>initialize</phase>
+						<goals>
+							<goal>clean</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+
+		<!-- ************************************************************* -->
+		<!-- MANAGE PLUGIN version and goals inherited by child modules -->
+		<!-- ************************************************************* -->
+		<pluginManagement>
+			<plugins>
+
+			</plugins>
+		</pluginManagement>
+	</build>
+	<!-- ************************************************ -->
+	<!-- DEFINE DEPENDENCIES required in this POM -->
+	<!-- ************************************************ -->
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-logging</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-hateoas</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-rest</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.flipkart.zjsonpatch</groupId>
+			<artifactId>zjsonpatch</artifactId>
+			<version>0.4.8</version>
+		</dependency>
+		<dependency>
+			<groupId>org.mapstruct</groupId>
+			<artifactId>mapstruct-jdk8</artifactId>
+			<version>1.3.0.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-mongodb-reactive</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-log4j2</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>de.flapdoodle.embed</groupId>
+			<artifactId>de.flapdoodle.embed.mongo</artifactId>
+			<version>${embedded-mongo.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<!-- ************************************************ -->
+	<!-- DEFIBE DEPENDENCIES inherited by child modules -->
+	<!-- ************************************************ -->
+
+	<dependencyManagement>
+		<dependencies>
+
+		</dependencies>
+	</dependencyManagement>
+
+</project>

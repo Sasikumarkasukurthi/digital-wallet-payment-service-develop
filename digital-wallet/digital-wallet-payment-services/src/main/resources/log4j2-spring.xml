@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="warn">
+	<Properties>
+		<Property name="basePath">./logs</Property>
+	</Properties>
+	<Appenders>
+		<RollingFile name="fileLogger"
+			fileName="${basePath}/application.log"
+			filePattern="${basePath}/application-%d{yyyy-MM-dd}.log">
+			<PatternLayout>
+				<pattern>{"logType":0,"status":"SUCCESS","statusCode":200,"level":"%level","timeStamp":"%d{yyyy-MM-dd HH:mm:ss.SSS}","message":"%enc{%m}{JSON}","serviceName":"%C","userName":"%X{userName}","transactionID":"%X{transactionID}","operationName":"%M"} %n </pattern>
+			</PatternLayout>
+			<Filters>
+        		<ThresholdFilter level="error" onMatch="DENY" onMismatch="ACCEPT" />
+    		</Filters>
+			<Policies>
+				<SizeBasedTriggeringPolicy size="20MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="10" />
+		</RollingFile>
+		<RollingFile name="errorFileLogger"
+			fileName="${basePath}/application.log"
+			filePattern="${basePath}/application-%d{yyyy-MM-dd}.log">
+			<PatternLayout>
+				<pattern>{"logType":0,"status":"FAILURE","statusCode":500,"level":"%level","timeStamp":"%d{yyyy-MM-dd HH:mm:ss.SSS}","message":"%enc{%m}{JSON}","serviceName":"%C","userName":"%X{userName}","transactionID":"%X{transactionID}","operationName":"%M","stackTraceMessage":"%enc{%throwable{full}}{JSON}"} %n %throwable{0} </pattern>
+			</PatternLayout>
+			<Filters>
+        		<ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY" />
+    		</Filters>
+			<Policies>
+				<SizeBasedTriggeringPolicy size="20MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="10" />
+		</RollingFile>
+		<RollingFile name="auditFileLogger"
+			fileName="${basePath}/audit.log"
+			filePattern="${basePath}/audit-%d{yyyy-MM-dd}.log">
+			<PatternLayout>
+				<pattern>%m%n</pattern>
+			</PatternLayout>
+			<Policies>
+				<SizeBasedTriggeringPolicy size="100MB" />
+			</Policies>
+			<DefaultRolloverStrategy max="10" />
+		</RollingFile>
+
+		<Console name="console" target="SYSTEM_OUT">
+			<PatternLayout>
+			<pattern>{"logType":0,"status":"SUCCESS","statusCode":200,"level":"%level","timeStamp":"%d{yyyy-MM-dd HH:mm:ss.SSS}","message":"%enc{%m}{JSON}","serviceName":"%C","userName":"%X{userName}","transactionID":"%X{transactionID}","operationName":"%M"} %n  </pattern>
+			</PatternLayout>
+			<Filters>
+        		<ThresholdFilter level="error" onMatch="DENY" onMismatch="ACCEPT" />
+    		</Filters>
+		</Console>
+		<Console name="errorConsole" target="SYSTEM_OUT">
+			<PatternLayout>
+			<pattern>{"logType":0,"status":"FAILURE","statusCode":500,"level":"%level","timeStamp":"%d{yyyy-MM-dd HH:mm:ss.SSS}","message":"%enc{%m}{JSON}","serviceName":"%C","userName":"%X{userName}","transactionID":"%X{transactionID}","operationName":"%M","stackTraceMessage":"%enc{%throwable{full}}{JSON}"} %n %throwable{0}</pattern>
+			</PatternLayout>
+			<Filters>
+        		<ThresholdFilter level="error" onMatch="ACCEPT" onMismatch="DENY" />
+    		</Filters>
+		</Console>
+	</Appenders>
+	<Loggers>
+		<Logger name="com.tecnotree" level="debug" additivity="true">
+			<appender-ref ref="fileLogger" level="debug" />
+			<appender-ref ref="errorFileLogger" level="debug" />
+		</Logger>
+		<Logger name="auditLogger" level="debug" additivity="true">
+			<appender-ref ref="auditFileLogger" level="debug" />
+		</Logger>
+		<Root level="info" additivity="false">
+			<appender-ref ref="console" />
+			<appender-ref ref="errorConsole" />
+		</Root>
+	</Loggers>
+</Configuration>

@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0 http://maven.apache.org/xsd/settings-1.0.0.xsd">
+
+	<servers>
+		<server>
+			<id>tt-nexus</id>
+			<username></username>
+			<password></password>
+		</server>
+	</servers>
+
+
+	<mirrors>
+		<mirror>
+			<id>tt-nexus</id>
+			<name>Tecnotree Nexus Public Mirror</name>
+			<url>https://nexus.tecnotree.com/repository/maven-public/</url>
+			<mirrorOf>*</mirrorOf>
+		</mirror>
+	</mirrors>
+
+	<profiles>
+		<profile>
+			<id>develop</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+				<LOG_LEVEL>INFO</LOG_LEVEL>
+				<JAVA_OPTS>-Xms2g -Xmx2g</JAVA_OPTS>
+
+				<SERVER_PORT>8085</SERVER_PORT>
+				<SERVER_HOST>localhost</SERVER_HOST>
+				<HOST_IDENTIFIER>${SERVER_HOST}:${SERVER_PORT}</HOST_IDENTIFIER>
+
+				<TOMCAT_BASE>digital-wallet-payment-services/target</TOMCAT_BASE>
+				<TOMCAT_MAX_CONNECTIONS>100</TOMCAT_MAX_CONNECTIONS>
+				<TOMCAT_MAX_THREADS>10</TOMCAT_MAX_THREADS>
+				<TOMCAT_MIN_SPARE_THREADS>5</TOMCAT_MIN_SPARE_THREADS>				
+				<!-- <MONGODB_URI>mongodb://tecnotree:tecnotree123@192.168.229.134:57019/dclm_int?retryWrites=false</MONGODB_URI> -->
+				<MONGODB_URI>mongodb://DCLMDEV:DCLMDEV@192.168.229.134:57019/DCLMDEV?retryWrites=false</MONGODB_URI>			
+
+				<TENANT>1</TENANT>
+				<VERSION>1</VERSION>
+				<OPCO>nigeria</OPCO>				
+				<PROTOCOL>http</PROTOCOL>
+				<SCHEMA_FILE>swagger.yaml</SCHEMA_FILE>
+				
+				<CURRENCY>INR</CURRENCY>
+				<STRIPE_SECRET_KEY>sk_test_51KBu4YL6OzPr1R1kcYn0Uyz8QufyygiVxJAUMx23yl2f3vs7qkrWoGekiuhrKmEQzTWsFtTjrb5LVUzYFTIZw2ZT002PgWzzYn</STRIPE_SECRET_KEY>
+				
+				<CONFIG_DIR>C:\user\local\tomcat\config\core</CONFIG_DIR>
+				<CONFIG_VERSION>v1</CONFIG_VERSION>
+			</properties>
+		</profile>
+		<profile>
+			<id>test</id>
+			<activation>
+				<activeByDefault>false</activeByDefault>
+			</activation>
+			<properties>
+			
+				<PROTOCOL>http</PROTOCOL>
+				<SCHEMA_FILE>swagger.yaml</SCHEMA_FILE>
+				
+				<CONFIG_PATH>C:/dc/digital-wallet-payment-service/digital-wallet/digital-wallet-payment-service/target/config</CONFIG_PATH>
+				<REDIS_HOST>localhost</REDIS_HOST>
+				<REDIS_PORT>6379</REDIS_PORT>
+				<BASE_URL>http://dclm.cluster1.devtestlab2.tecnotree.com</BASE_URL>
+				<DAP_URL>http://dclm.cluster1.devtestlab2.tecnotree.com</DAP_URL>
+				<DMLD_SERVICE_REQUEST_CATEGORY></DMLD_SERVICE_REQUEST_CATEGORY>
+				
+				
+				<IS_CATEGORY_DUPLICATE_CHECK>true</IS_CATEGORY_DUPLICATE_CHECK>
+				<MASTER_DATA_HOST>http://dclm-mmp.cluster1.devtestlab2.tecnotree.com</MASTER_DATA_HOST>
+				<ELASTICSEARCH_HOST>elasticsearch-dclm.cluster1.devtestlab2.tecnotree.com</ELASTICSEARCH_HOST>
+			</properties>
+		</profile>
+
+
+	</profiles>
+	<activeProfiles>
+		<activeProfile>digital</activeProfile>
+	</activeProfiles>
+
+</settings>
